@@ -1,4 +1,4 @@
-workspace/notebooks/executions/*
+workspace/notebooks/iris/executions/*
 workspace/notebooks/.ipynb_checkpoints
 workspace/data/raw/*
 workspace/data/cleaned/*
@@ -6,3 +6,4 @@ workspace/data/curated/*
 airflow/logs/*
 venv
 .idea
+workspace/utils/jars/*

@@ -17,7 +17,16 @@ Project was based on an interest in Data Engineering field. It provided a good w
 This project is to be used in your own machine, so you just need to run the follow commanda
 
 ```commandline
-docker/docker-compose up
+cd docker
+docker-compose -f {DOCKER_COMPOSE_FILE.yaml} up -d
+
+```
+
+to shutdown the container 
+
+```commandline
+cd docker
+docker-compose -f {DOCKER_COMPOSE_FILE.yaml} down
 ```
 
 ## Tools
@@ -49,3 +58,31 @@ localhost:8888
 ![spark.png](images/spark.png)
 
 ![jupyter.png](images/jupyter.png)
+
+## Register a kafka topic
+
+You need to register a kafka topic using POST request, you can use postman to do it
+
+```commandline
+POST  http://localhost:8083/connectors --> To register the kafka connector
+
+{
+    "name": "inventory-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "database.hostname": "postgres",
+        "database.port": "5432",
+        "database.user": "postgres",
+        "database.password": "postgres",
+        "database.dbname" : "postgres",
+        "database.server.name": "dbserver1",
+        "table.include.list": "inventory.customers"
+    }
+}  
+```
+
+To see the messages you can go to kafdrop on
+
+```commandline
+localhost:9000
+```

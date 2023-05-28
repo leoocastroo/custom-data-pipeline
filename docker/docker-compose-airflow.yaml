@@ -33,48 +33,6 @@ x-airflow-common:
       condition: service_healthy
 
 services:
-  jupyterlab:
-    build:
-      context: .
-      dockerfile: jupyterlab
-    ports:
-      - "8888:8888"
-    environment:
-      - JUPYTER_ENABLE_LAB=yes
-    volumes:
-      - ../workspace/notebooks:/home/jovyan/work/notebooks
-      - ../workspace:/opt/workspace
-
-  spark-master:
-      image: bitnami/spark:3.3
-      user: root
-      hostname: spark
-      environment:
-          - SPARK_MODE=master
-          - SPARK_RPC_AUTHENTICATION_ENABLED=no
-          - SPARK_RPC_ENCRYPTION_ENABLED=no
-          - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-          - SPARK_SSL_ENABLED=no
-      volumes:
-          - ../workspace:/opt/workspace
-      ports:
-          - "8081:8080"
-          - "7077:7077"
-
-  spark-worker:
-      image: bitnami/spark:3.3
-      user: root
-      environment:
-          - SPARK_MODE=worker
-          - SPARK_MASTER_URL=spark://spark-master:7077
-          - SPARK_WORKER_MEMORY=1G
-          - SPARK_WORKER_CORES=1
-          - SPARK_RPC_AUTHENTICATION_ENABLED=no
-          - SPARK_RPC_ENCRYPTION_ENABLED=no
-          - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      volumes:
-          - ../workspace:/opt/workspace
-
   postgres:
     image: postgres:13
     environment:
@@ -122,18 +80,6 @@ services:
       retries: 5
     restart: always
 
-  airflow-worker:
-    <<: *airflow-common
-    command: celery worker
-    healthcheck:
-      test:
-        - "CMD-SHELL"
-        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    restart: always
-
   airflow-init:
     <<: *airflow-common
     command: version
@@ -143,15 +89,3 @@ services:
       _AIRFLOW_WWW_USER_CREATE: 'true'
       _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
       _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
-
-  flower:
-    <<: *airflow-common
-    command: celery flower
-    ports:
-      - 5555:5555
-    healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://localhost:5555/" ]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    restart: always
