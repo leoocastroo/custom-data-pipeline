@@ -7,3 +7,4 @@ airflow/logs/*
 venv
 .idea
 workspace/utils/jars/*
+.ipynb_checkpoints

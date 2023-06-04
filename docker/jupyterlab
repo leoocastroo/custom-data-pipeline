@@ -2,3 +2,4 @@ FROM jupyter/pyspark-notebook
 
 RUN pip install delta-spark
 RUN pip install findspark
+RUN pip install kafka-python
