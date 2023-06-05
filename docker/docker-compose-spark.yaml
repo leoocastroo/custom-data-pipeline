@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: jupyterlab
     ports:
-      - "8888:8888"
+      - 8888:8888
     environment:
       - JUPYTER_ENABLE_LAB=yes
     volumes:
@@ -27,7 +27,7 @@ services:
       - SPARK_SSL_ENABLED=no
       - SPARK_USER=spark
     ports:
-      - '8080:8080'
+      - 8080:8080
     volumes:
       - ../workspace:/opt/workspace
 

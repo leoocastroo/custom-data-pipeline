@@ -1,8 +1,8 @@
 # Custom data pipeline
 
-A data pipeline to process data from various sources (In development)
+A data pipeline to process data from various sources. Here we are going to test different types of ingestion (cdc, full load, incremental) and different types of data technologies (airflow, kafka, delta, spark...)
 
-We use three layers (raw, cleaned and curated) to ingest data into a data lake.
+In the main architeture we use three layers (raw, cleaned and curated) to ingest data into a data lake.
 
 ## Motivations
 
@@ -10,23 +10,22 @@ Project was based on an interest in Data Engineering field. It provided a good w
 
 ## Architeture
 
-![Architeture.png](images/Architeture.png)
+![Architeture.png](images/Architeture.jpg)
 
 ## Setup
 
-This project is to be used in your own machine, so you just need to run the follow commanda
+For this project you have to had docker installed in your machine (https://www.docker.com/)
+
+This project is to be used in your own machine, so you just need to run the follow command
 
 ```commandline
-cd docker
-docker-compose -f {DOCKER_COMPOSE_FILE.yaml} up -d
-
+./start.sh
 ```
 
-to shutdown the container 
+to shutdown everything, just type
 
 ```commandline
-cd docker
-docker-compose -f {DOCKER_COMPOSE_FILE.yaml} down
+./stop.sh
 ```
 
 ## Tools
@@ -51,6 +50,12 @@ Jupyter (To use jupyter you must get the token provide in his container)
 localhost:8888
 ```
 
+Kafdrop
+
+```commandline
+localhost:9000
+```
+
 ## Screenshots
 
 ![airflow.png](images/airflow.png)
@@ -58,31 +63,3 @@ localhost:8888
 ![spark.png](images/spark.png)
 
 ![jupyter.png](images/jupyter.png)
-
-## Register a kafka topic
-
-You need to register a kafka topic using POST request, you can use postman to do it
-
-```commandline
-POST  http://localhost:8083/connectors --> To register the kafka connector
-
-{
-    "name": "inventory-connector",
-    "config": {
-        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
-        "database.hostname": "postgres",
-        "database.port": "5432",
-        "database.user": "postgres",
-        "database.password": "postgres",
-        "database.dbname" : "postgres",
-        "database.server.name": "dbserver1",
-        "table.include.list": "inventory.customers"
-    }
-}  
-```
-
-To see the messages you can go to kafdrop on
-
-```commandline
-localhost:9000
-```
