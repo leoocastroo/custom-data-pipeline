@@ -7,7 +7,7 @@ from datetime import datetime
 
 default_args = {
     'owner': 'Airflow',
-    'start_date': datetime(2023, 3, 4)
+    'start_date': datetime(2023, 6, 4)
 }
 
 with DAG(
@@ -30,7 +30,7 @@ with DAG(
     )
 
     notebook_cleaned_task = PapermillOperator(
-        task_id="cleand",
+        task_id="cleaned",
         input_nb="/opt/workspace/notebooks/batch_fullload/cleaned.ipynb",
         output_nb="/opt/workspace/notebooks/batch_fullload/executions/cleaned/out-{{ execution_date }}.ipynb",
         parameters={"execution_date": "{{ execution_date }}"},
